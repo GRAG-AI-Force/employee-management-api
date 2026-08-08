@@ -1,0 +1,43 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Environments
+.env
+.venv
+env/
+venv/
+ENV/
+
+# Unit test / coverage reports
+htmlcov/
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+.hypothesis/
+.pytest_cache/
+cover/
+
+# IDEs
+.idea/
+.vscode/
+
+# Type checking
+.mypy_cache/
+.ruff_cache/
+
+# Docker
+.dockerignore
+
+# OS files
+.DS_Store
+
+# SonarQube
+.scannerwork/
