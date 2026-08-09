@@ -1,0 +1,33 @@
+from datetime import datetime, timezone
+from typing import TYPE_CHECKING, List
+
+from sqlalchemy import DateTime, String, Text
+from sqlalchemy.orm import Mapped, mapped_column, relationship
+
+from app.core.database import Base
+
+if TYPE_CHECKING:
+    from app.models.employee import Employee
+
+
+class Department(Base):
+    __tablename__ = "departments"
+
+    id: Mapped[int] = mapped_column(primary_key=True, index=True)
+    name: Mapped[str] = mapped_column(
+        String(100), unique=True, nullable=False, index=True
+    )
+    description: Mapped[str | None] = mapped_column(Text)
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), default=lambda: datetime.now(timezone.utc)
+    )
+    updated_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True),
+        default=lambda: datetime.now(timezone.utc),
+        onupdate=lambda: datetime.now(timezone.utc),
+    )
+
+    # Relationships
+    employees: Mapped[List["Employee"]] = relationship(
+        "Employee", back_populates="department", cascade="all, delete-orphan"
+    )
