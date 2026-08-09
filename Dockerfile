@@ -1,8 +1,8 @@
 # Stage 1: Build environment
 FROM python:3.12-slim as builder
 
-# Install build dependencies
 RUN apt-get update && \
+    apt-get upgrade -y && \
     apt-get install -y --no-install-recommends gcc libpq-dev && \
     rm -rf /var/lib/apt/lists/*
 
@@ -13,8 +13,8 @@ RUN pip wheel --no-cache-dir --no-deps --wheel-dir /app/wheels -r requirements.t
 # Stage 2: Runtime environment
 FROM python:3.12-slim
 
-# Install runtime dependencies (e.g., libpq5 for psycopg)
 RUN apt-get update && \
+    apt-get upgrade -y && \
     apt-get install -y --no-install-recommends libpq5 curl && \
     rm -rf /var/lib/apt/lists/*
 
