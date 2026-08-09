@@ -1,26 +1,20 @@
 # Stage 1: Build environment
-FROM python:3.12-slim as builder
+FROM python:3.12-alpine AS builder
 
-RUN apt-get update && \
-    apt-get upgrade -y && \
-    apt-get install -y --no-install-recommends gcc libpq-dev && \
-    rm -rf /var/lib/apt/lists/*
+RUN apk add --no-cache gcc musl-dev postgresql-dev
 
 WORKDIR /app
 COPY requirements.txt .
 RUN pip wheel --no-cache-dir --no-deps --wheel-dir /app/wheels -r requirements.txt
 
 # Stage 2: Runtime environment
-FROM python:3.12-slim
+FROM python:3.12-alpine
 
-RUN apt-get update && \
-    apt-get upgrade -y && \
-    apt-get install -y --no-install-recommends libpq5 curl && \
-    rm -rf /var/lib/apt/lists/*
+RUN apk add --no-cache libpq curl
 
 # Create non-root user
-RUN groupadd -g 1001 appgroup && \
-    useradd -u 1001 -g appgroup -s /bin/bash -m appuser
+RUN addgroup -g 1001 appgroup && \
+    adduser -u 1001 -G appgroup -s /bin/sh -D appuser
 
 WORKDIR /app
 
