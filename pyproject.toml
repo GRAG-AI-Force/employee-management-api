@@ -59,7 +59,7 @@ exclude = '''
 profile = "black"
 multi_line_output = 3
 line_length = 88
-skip = ["alembic"]
+skip = ["alembic", ".venv", "venv"]
 
 [tool.mypy]
 python_version = "3.12"
