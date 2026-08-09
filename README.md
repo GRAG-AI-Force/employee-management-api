@@ -1,4 +1,7 @@
 # Employee Management API   "This will be deployed , see this is perfect"
+                                                            
+
+
 
 A production-ready FastAPI REST API for managing employees and departments. This application is designed to serve as a robust target for Jenkins CI/CD and DevSecOps pipelines.
 
@@ -147,3 +150,7 @@ docker build -t employee-management-api .
 # Run the container (ensure DATABASE_URL is passed in)
 docker run -p 8000:8000 -e DATABASE_URL="postgresql+psycopg://user:pass@host:5432/db" employee-management-api
 ```
+
+
+
+this will work.
