@@ -5,7 +5,7 @@ RUN apk add --no-cache gcc musl-dev postgresql-dev
 
 WORKDIR /app
 COPY requirements.txt .
-RUN pip wheel --no-cache-dir --no-deps --wheel-dir /app/wheels -r requirements.txt
+RUN pip wheel --no-cache-dir --wheel-dir /app/wheels -r requirements.txt
 
 # Stage 2: Runtime environment
 FROM python:3.12-alpine
@@ -20,7 +20,7 @@ WORKDIR /app
 
 # Copy wheels and install
 COPY --from=builder /app/wheels /wheels
-RUN pip install --no-cache /wheels/*
+RUN pip install --no-cache-dir --no-index --find-links=/wheels /wheels/*
 
 # Copy application code
 COPY --chown=appuser:appgroup ./app /app/app
