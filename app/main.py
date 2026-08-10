@@ -63,6 +63,8 @@ async def add_request_id_and_log(
         response = await call_next(request)
         # Update factory to include status code for the final request log if we wanted to
         # but the actual log messages in handlers will just pick up what is currently in the factory.
+        response.headers["X-Content-Type-Options"] = "nosniff"
+        response.headers["Cross-Origin-Resource-Policy"] = "same-origin"
         return response
     finally:
         logging.setLogRecordFactory(old_factory)
