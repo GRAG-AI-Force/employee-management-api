@@ -6,3 +6,9 @@ pydantic-settings==2.5.2
 sqlalchemy==2.0.35
 psycopg[binary]==3.2.3
 alembic==1.13.3
+
+# Security overrides for Snyk vulnerabilities
+click>=8.3.3
+h11>=0.16.0
+idna>=3.15
+mako>=1.3.12
