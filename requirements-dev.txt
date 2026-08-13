@@ -9,3 +9,6 @@ bandit==1.7.10
 semgrep==1.90.0
 types-passlib
 types-python-jose
+
+# API testing
+schemathesis==4.24.2
