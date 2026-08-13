@@ -11,4 +11,4 @@ types-passlib
 types-python-jose
 
 # API testing
-schemathesis
+schemathesis==4.24.2
