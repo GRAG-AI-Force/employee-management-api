@@ -12,7 +12,7 @@ class PaginationParams(BaseModel):
     )
 
 
-class PaginatedResponse(BaseModel, Generic[T]):  # noqa: UP046
+class PaginatedResponse(BaseModel, Generic[T]):
     total: int
     items: list[T]
     skip: int

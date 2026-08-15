@@ -51,6 +51,6 @@ class DepartmentService:
 
     def delete_department(self, department_id: int) -> None:
         department = self.get_department(department_id)
-        # Note: if there are employees, they will be deleted due to cascade="all, delete-orphan" in the model.
-        # If we wanted to prevent deletion when employees exist, we would check that here.
+        # Note: if there are employees, cascade="all, delete-orphan" will
+        # delete them.
         self.repository.delete(department.id)

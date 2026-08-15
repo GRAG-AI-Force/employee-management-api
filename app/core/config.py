@@ -16,7 +16,7 @@ class Settings(BaseSettings):
     LOG_LEVEL: str = "INFO"
 
     # Database Settings
-    DATABASE_URL: str
+    DATABASE_URL: str = "sqlite:///./test.db"
 
     @field_validator("DATABASE_URL", mode="before")
     @classmethod
