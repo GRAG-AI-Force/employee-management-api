@@ -11,11 +11,13 @@ class DepartmentRepository:
 
     def get_by_name(self, name: str) -> Department | None:
         from sqlalchemy import select
+
         stmt = select(Department).where(Department.name == name)
         return self.session.execute(stmt).scalar_one_or_none()
 
     def get_list(self, skip: int = 0, limit: int = 100) -> tuple[int, list[Department]]:
         from sqlalchemy import func, select
+
         # Count
         count_stmt = select(func.count()).select_from(Department)
         total = self.session.execute(count_stmt).scalar_one()
