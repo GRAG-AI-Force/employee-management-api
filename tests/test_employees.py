@@ -160,3 +160,16 @@ def test_delete_employee(client: TestClient, test_department):
 
     get_res = client.get(f"/api/v1/employees/{emp_id}")
     assert get_res.status_code == status.HTTP_404_NOT_FOUND
+
+
+def test_employee_id_out_of_range(client: TestClient):
+    # Out of 32-bit range (> 2_147_483_647)
+    response = client.get("/api/v1/employees/26490016558")
+    assert response.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
+
+    # Less than 1
+    response = client.get("/api/v1/employees/0")
+    assert response.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
+
+    response = client.get("/api/v1/employees/-5")
+    assert response.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY

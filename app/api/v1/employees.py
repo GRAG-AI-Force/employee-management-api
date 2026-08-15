@@ -1,7 +1,9 @@
-from fastapi import APIRouter, Depends, Query, status
+from typing import Annotated
+
+from fastapi import APIRouter, Depends, Path, Query, status
 
 from app.dependencies.services import get_employee_service
-from app.schemas.common import PaginatedResponse
+from app.schemas.common import ErrorResponse, PaginatedResponse
 from app.schemas.employee import (
     EmployeeCreate,
     EmployeeResponse,
@@ -12,11 +14,27 @@ from app.services.employee import EmployeeService
 
 router = APIRouter(prefix="/employees", tags=["Employees"])
 
+EmployeeId = Annotated[
+    int,
+    Path(
+        ge=1,
+        le=2_147_483_647,
+        description="Employee ID (32-bit integer)",
+    ),
+]
+
 
 @router.post(
     "",
     response_model=EmployeeResponse,
     status_code=status.HTTP_201_CREATED,
+    responses={
+        status.HTTP_400_BAD_REQUEST: {
+            "model": ErrorResponse,
+            "description": "Bad Request",
+        },
+        status.HTTP_409_CONFLICT: {"model": ErrorResponse, "description": "Conflict"},
+    },
     summary="Create a new employee",
 )
 def create_employee(
@@ -33,7 +51,7 @@ def create_employee(
 )
 def search_employees(
     q: str = Query(..., min_length=2, description="Search term"),
-    skip: int = Query(0, ge=0),
+    skip: int = Query(0, ge=0, le=100_000),
     limit: int = Query(100, ge=1, le=100),
     service: EmployeeService = Depends(get_employee_service),
 ) -> dict:
@@ -47,7 +65,7 @@ def search_employees(
     summary="List all employees",
 )
 def list_employees(
-    skip: int = Query(0, ge=0),
+    skip: int = Query(0, ge=0, le=100_000),
     limit: int = Query(100, ge=1, le=100),
     service: EmployeeService = Depends(get_employee_service),
 ) -> dict:
@@ -58,10 +76,13 @@ def list_employees(
 @router.get(
     "/{employee_id}",
     response_model=EmployeeResponse,
+    responses={
+        status.HTTP_404_NOT_FOUND: {"model": ErrorResponse, "description": "Not Found"},
+    },
     summary="Get an employee by ID",
 )
 def get_employee(
-    employee_id: int,
+    employee_id: EmployeeId,
     service: EmployeeService = Depends(get_employee_service),
 ) -> EmployeeResponse:
     return service.get_employee(employee_id)  # type: ignore
@@ -70,10 +91,18 @@ def get_employee(
 @router.put(
     "/{employee_id}",
     response_model=EmployeeResponse,
+    responses={
+        status.HTTP_400_BAD_REQUEST: {
+            "model": ErrorResponse,
+            "description": "Bad Request",
+        },
+        status.HTTP_404_NOT_FOUND: {"model": ErrorResponse, "description": "Not Found"},
+        status.HTTP_409_CONFLICT: {"model": ErrorResponse, "description": "Conflict"},
+    },
     summary="Update an employee",
 )
 def update_employee(
-    employee_id: int,
+    employee_id: EmployeeId,
     employee: EmployeeUpdate,
     service: EmployeeService = Depends(get_employee_service),
 ) -> EmployeeResponse:
@@ -83,10 +112,17 @@ def update_employee(
 @router.patch(
     "/{employee_id}/status",
     response_model=EmployeeResponse,
+    responses={
+        status.HTTP_400_BAD_REQUEST: {
+            "model": ErrorResponse,
+            "description": "Bad Request",
+        },
+        status.HTTP_404_NOT_FOUND: {"model": ErrorResponse, "description": "Not Found"},
+    },
     summary="Update employee active status",
 )
 def update_employee_status(
-    employee_id: int,
+    employee_id: EmployeeId,
     status_update: EmployeeStatusUpdate,
     service: EmployeeService = Depends(get_employee_service),
 ) -> EmployeeResponse:
@@ -96,10 +132,13 @@ def update_employee_status(
 @router.delete(
     "/{employee_id}",
     status_code=status.HTTP_204_NO_CONTENT,
+    responses={
+        status.HTTP_404_NOT_FOUND: {"model": ErrorResponse, "description": "Not Found"},
+    },
     summary="Delete an employee",
 )
 def delete_employee(
-    employee_id: int,
+    employee_id: EmployeeId,
     service: EmployeeService = Depends(get_employee_service),
 ) -> None:
     service.delete_employee(employee_id)

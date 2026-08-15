@@ -37,7 +37,8 @@ class DepartmentRepository:
     def update(self, db_obj: Department, obj_in: DepartmentUpdate) -> Department:
         update_data = obj_in.model_dump(exclude_unset=True)
         for field, value in update_data.items():
-            setattr(db_obj, field, value)
+            if value is not None or field == "description":
+                setattr(db_obj, field, value)
 
         self.session.add(db_obj)
         self.session.commit()

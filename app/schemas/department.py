@@ -1,6 +1,6 @@
-from datetime import datetime
+from datetime import UTC, datetime
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict, Field, field_serializer
 
 
 class DepartmentBase(BaseModel):
@@ -21,5 +21,11 @@ class DepartmentResponse(DepartmentBase):
     id: int
     created_at: datetime
     updated_at: datetime
+
+    @field_serializer("created_at", "updated_at", when_used="json")
+    def serialize_dt(self, dt: datetime) -> str:
+        if dt.tzinfo is None:
+            dt = dt.replace(tzinfo=UTC)
+        return dt.isoformat()
 
     model_config = ConfigDict(from_attributes=True)
