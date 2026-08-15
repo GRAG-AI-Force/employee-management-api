@@ -8,7 +8,7 @@ This API allows an organization to manage departments and their associated emplo
 - Department CRUD and listing
 - Employee CRUD, searching, filtering, and activation/deactivation
 - Relational mapping between Employees and Departments
-- Pagination for list endpoints
+- Pagination for list endpoints  
 
 ## Architecture & Technology Stack
 
