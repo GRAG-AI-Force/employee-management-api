@@ -8,12 +8,16 @@ from app.services.department import DepartmentService
 from app.services.employee import EmployeeService
 
 
-def get_department_service(db: Session = Depends(get_db)) -> DepartmentService:  # noqa: B008
+def get_department_service(
+    db: Session = Depends(get_db),
+) -> DepartmentService:  # noqa: B008
     repository = DepartmentRepository(db)
     return DepartmentService(repository)
 
 
-def get_employee_service(db: Session = Depends(get_db)) -> EmployeeService:  # noqa: B008
+def get_employee_service(
+    db: Session = Depends(get_db),
+) -> EmployeeService:  # noqa: B008
     employee_repo = EmployeeRepository(db)
     department_repo = DepartmentRepository(db)
     return EmployeeService(employee_repo, department_repo)
