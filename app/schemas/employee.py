@@ -1,7 +1,6 @@
 import re
 from datetime import datetime
 from decimal import Decimal
-from typing import Optional
 
 from pydantic import BaseModel, ConfigDict, EmailStr, Field, field_validator
 
@@ -10,7 +9,7 @@ class EmployeeBase(BaseModel):
     first_name: str = Field(..., min_length=2, max_length=100)
     last_name: str = Field(..., min_length=2, max_length=100)
     email: EmailStr
-    phone: Optional[str] = Field(None, max_length=20)
+    phone: str | None = Field(None, max_length=20)
     job_title: str = Field(..., min_length=2, max_length=100)
     salary: Decimal = Field(..., gt=0, max_digits=10, decimal_places=2)
     department_id: int
@@ -18,11 +17,9 @@ class EmployeeBase(BaseModel):
 
     @field_validator("phone")
     @classmethod
-    def validate_phone(cls, v: Optional[str]) -> Optional[str]:
-        if v is not None:
-            # Basic validation: ensure only digits, +, -, spaces, or parentheses
-            if not re.match(r"^[\d\+\-\s\(\)]+$", v):
-                raise ValueError("Invalid phone number format")
+    def validate_phone(cls, v: str | None) -> str | None:
+        if v is not None and not re.match(r"^[\d\+\-\s\(\)]+$", v):
+            raise ValueError("Invalid phone number format")
         return v
 
 
@@ -31,21 +28,20 @@ class EmployeeCreate(EmployeeBase):
 
 
 class EmployeeUpdate(BaseModel):
-    first_name: Optional[str] = Field(None, min_length=2, max_length=100)
-    last_name: Optional[str] = Field(None, min_length=2, max_length=100)
-    email: Optional[EmailStr] = None
-    phone: Optional[str] = Field(None, max_length=20)
-    job_title: Optional[str] = Field(None, min_length=2, max_length=100)
-    salary: Optional[Decimal] = Field(None, gt=0, max_digits=10, decimal_places=2)
-    department_id: Optional[int] = None
-    is_active: Optional[bool] = None
+    first_name: str | None = Field(None, min_length=2, max_length=100)
+    last_name: str | None = Field(None, min_length=2, max_length=100)
+    email: EmailStr | None = None
+    phone: str | None = Field(None, max_length=20)
+    job_title: str | None = Field(None, min_length=2, max_length=100)
+    salary: Decimal | None = Field(None, gt=0, max_digits=10, decimal_places=2)
+    department_id: int | None = None
+    is_active: bool | None = None
 
     @field_validator("phone")
     @classmethod
-    def validate_phone(cls, v: Optional[str]) -> Optional[str]:
-        if v is not None:
-            if not re.match(r"^[\d\+\-\s\(\)]+$", v):
-                raise ValueError("Invalid phone number format")
+    def validate_phone(cls, v: str | None) -> str | None:
+        if v is not None and not re.match(r"^[\d\+\-\s\(\)]+$", v):
+            raise ValueError("Invalid phone number format")
         return v
 
 

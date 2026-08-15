@@ -1,4 +1,4 @@
-from typing import Any, List, Optional
+from typing import Any
 
 from sqlalchemy import func, or_, select
 from sqlalchemy.orm import Session
@@ -10,14 +10,14 @@ class EmployeeRepository:
     def __init__(self, session: Session):
         self.session = session
 
-    def get_by_id(self, employee_id: int) -> Optional[Employee]:
+    def get_by_id(self, employee_id: int) -> Employee | None:
         return self.session.get(Employee, employee_id)
 
-    def get_by_email(self, email: str) -> Optional[Employee]:
+    def get_by_email(self, email: str) -> Employee | None:
         stmt = select(Employee).where(Employee.email == email)
         return self.session.execute(stmt).scalar_one_or_none()
 
-    def get_list(self, skip: int = 0, limit: int = 100) -> tuple[int, List[Employee]]:
+    def get_list(self, skip: int = 0, limit: int = 100) -> tuple[int, list[Employee]]:
         count_stmt = select(func.count()).select_from(Employee)
         total = self.session.execute(count_stmt).scalar_one()
 
@@ -28,7 +28,7 @@ class EmployeeRepository:
 
     def get_by_department(
         self, department_id: int, skip: int = 0, limit: int = 100
-    ) -> tuple[int, List[Employee]]:
+    ) -> tuple[int, list[Employee]]:
         count_stmt = (
             select(func.count())
             .select_from(Employee)
@@ -49,7 +49,7 @@ class EmployeeRepository:
 
     def search(
         self, query: str, skip: int = 0, limit: int = 100
-    ) -> tuple[int, List[Employee]]:
+    ) -> tuple[int, list[Employee]]:
         search_filter = or_(
             Employee.first_name.ilike(f"%{query}%"),
             Employee.last_name.ilike(f"%{query}%"),

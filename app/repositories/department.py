@@ -1,24 +1,21 @@
-from typing import List, Optional
-
-from sqlalchemy import func, select
-from sqlalchemy.orm import Session
-
 from app.models.department import Department
 from app.schemas.department import DepartmentCreate, DepartmentUpdate
 
 
 class DepartmentRepository:
-    def __init__(self, session: Session):
+    def __init__(self, session):
         self.session = session
 
-    def get_by_id(self, department_id: int) -> Optional[Department]:
+    def get_by_id(self, department_id: int) -> Department | None:
         return self.session.get(Department, department_id)
 
-    def get_by_name(self, name: str) -> Optional[Department]:
+    def get_by_name(self, name: str) -> Department | None:
+        from sqlalchemy import select
         stmt = select(Department).where(Department.name == name)
         return self.session.execute(stmt).scalar_one_or_none()
 
-    def get_list(self, skip: int = 0, limit: int = 100) -> tuple[int, List[Department]]:
+    def get_list(self, skip: int = 0, limit: int = 100) -> tuple[int, list[Department]]:
+        from sqlalchemy import func, select
         # Count
         count_stmt = select(func.count()).select_from(Department)
         total = self.session.execute(count_stmt).scalar_one()

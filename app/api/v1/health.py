@@ -1,6 +1,6 @@
 import logging
 
-from fastapi import APIRouter, Depends, status
+from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy import text
 from sqlalchemy.orm import Session
 
@@ -31,7 +31,7 @@ def health_check() -> HealthResponse:
     status_code=status.HTTP_200_OK,
     summary="Readiness probe",
 )
-def readiness_check(db: Session = Depends(get_db)) -> HealthResponse:
+def readiness_check(db: Session = Depends(get_db)) -> HealthResponse:  # noqa: B008
     """
     Readiness check endpoint that verifies connectivity to the database.
     """
@@ -39,12 +39,10 @@ def readiness_check(db: Session = Depends(get_db)) -> HealthResponse:
         # Execute a simple query to ensure database is reachable
         db.execute(text("SELECT 1"))
         return HealthResponse(status="ready", service=settings.APP_NAME)
-    except Exception as e:
-        logger.error(f"Readiness check failed: {str(e)}")
+    except Exception as e:  # noqa: BLE001
+        logger.error(f"Readiness check failed: {e!s}")
         # In a real scenario, you might return 503, but returning 500 or just a failed status
         # is sometimes preferred depending on the orchestrator.
-        from fastapi import HTTPException
-
         raise HTTPException(
             status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
             detail="Service is not ready (Database connection failed)",
