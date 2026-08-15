@@ -21,7 +21,7 @@ router = APIRouter(prefix="/employees", tags=["Employees"])
 )
 def create_employee(
     employee: EmployeeCreate,
-    service: EmployeeService = Depends(get_employee_service),  # noqa: B008
+    service: EmployeeService = Depends(get_employee_service),
 ) -> EmployeeResponse:
     return service.create_employee(employee)  # type: ignore
 
@@ -35,7 +35,7 @@ def search_employees(
     q: str = Query(..., min_length=2, description="Search term"),
     skip: int = Query(0, ge=0),
     limit: int = Query(100, ge=1, le=100),
-    service: EmployeeService = Depends(get_employee_service),  # noqa: B008
+    service: EmployeeService = Depends(get_employee_service),
 ) -> dict:
     total, items = service.search_employees(q, skip=skip, limit=limit)
     return {"total": total, "items": items, "skip": skip, "limit": limit}
@@ -49,7 +49,7 @@ def search_employees(
 def list_employees(
     skip: int = Query(0, ge=0),
     limit: int = Query(100, ge=1, le=100),
-    service: EmployeeService = Depends(get_employee_service),  # noqa: B008
+    service: EmployeeService = Depends(get_employee_service),
 ) -> dict:
     total, items = service.get_employees(skip=skip, limit=limit)
     return {"total": total, "items": items, "skip": skip, "limit": limit}
@@ -62,7 +62,7 @@ def list_employees(
 )
 def get_employee(
     employee_id: int,
-    service: EmployeeService = Depends(get_employee_service),  # noqa: B008
+    service: EmployeeService = Depends(get_employee_service),
 ) -> EmployeeResponse:
     return service.get_employee(employee_id)  # type: ignore
 
@@ -75,7 +75,7 @@ def get_employee(
 def update_employee(
     employee_id: int,
     employee: EmployeeUpdate,
-    service: EmployeeService = Depends(get_employee_service),  # noqa: B008
+    service: EmployeeService = Depends(get_employee_service),
 ) -> EmployeeResponse:
     return service.update_employee(employee_id, employee)  # type: ignore
 
@@ -88,7 +88,7 @@ def update_employee(
 def update_employee_status(
     employee_id: int,
     status_update: EmployeeStatusUpdate,
-    service: EmployeeService = Depends(get_employee_service),  # noqa: B008
+    service: EmployeeService = Depends(get_employee_service),
 ) -> EmployeeResponse:
     return service.update_employee_status(employee_id, status_update)  # type: ignore
 
@@ -100,6 +100,6 @@ def update_employee_status(
 )
 def delete_employee(
     employee_id: int,
-    service: EmployeeService = Depends(get_employee_service),  # noqa: B008
+    service: EmployeeService = Depends(get_employee_service),
 ) -> None:
     service.delete_employee(employee_id)

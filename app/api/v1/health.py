@@ -31,7 +31,7 @@ def health_check() -> HealthResponse:
     status_code=status.HTTP_200_OK,
     summary="Readiness probe",
 )
-def readiness_check(db: Session = Depends(get_db)) -> HealthResponse:  # noqa: B008
+def readiness_check(db: Session = Depends(get_db)) -> HealthResponse:
     """
     Readiness check endpoint that verifies connectivity to the database.
     """
@@ -39,11 +39,10 @@ def readiness_check(db: Session = Depends(get_db)) -> HealthResponse:  # noqa: B
         # Execute a simple query to ensure database is reachable
         db.execute(text("SELECT 1"))
         return HealthResponse(status="ready", service=settings.APP_NAME)
-    except Exception as e:  # noqa: BLE001
+    except Exception as e:
         logger.error(f"Readiness check failed: {e!s}")
-        # In a real scenario, you might return 503, but returning 500 or just a failed status
-        # is sometimes preferred depending on the orchestrator.
+        # In a real scenario, returning 503 or 500 depends on orchestrator.
         raise HTTPException(
             status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
             detail="Service is not ready (Database connection failed)",
-        )
+        ) from e

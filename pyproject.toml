@@ -36,7 +36,14 @@ exclude = [
     "alembic",
 ]
 
+[tool.ruff.lint]
+select = ["E", "F", "B", "UP", "SIM", "PIE", "LOG", "RUF"]
+ignore = [
+    "B008",  # Do not perform function call in argument defaults (FastAPI Depends)
+]
+
 [tool.black]
+
 line-length = 88
 target-version = ['py312']
 include = '\.pyi?$'

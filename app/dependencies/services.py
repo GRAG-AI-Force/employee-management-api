@@ -10,14 +10,14 @@ from app.services.employee import EmployeeService
 
 def get_department_service(
     db: Session = Depends(get_db),
-) -> DepartmentService:  # noqa: B008
+) -> DepartmentService:
     repository = DepartmentRepository(db)
     return DepartmentService(repository)
 
 
 def get_employee_service(
     db: Session = Depends(get_db),
-) -> EmployeeService:  # noqa: B008
+) -> EmployeeService:
     employee_repo = EmployeeRepository(db)
     department_repo = DepartmentRepository(db)
     return EmployeeService(employee_repo, department_repo)
