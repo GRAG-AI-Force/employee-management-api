@@ -22,7 +22,7 @@ router = APIRouter(prefix="/departments", tags=["Departments"])
 )
 def create_department(
     department: DepartmentCreate,
-    service: DepartmentService = Depends(get_department_service),
+    service: DepartmentService = Depends(get_department_service),  # noqa: B008
 ) -> DepartmentResponse:
     return service.create_department(department)  # type: ignore
 
@@ -35,7 +35,7 @@ def create_department(
 def list_departments(
     skip: int = Query(0, ge=0),
     limit: int = Query(100, ge=1, le=100),
-    service: DepartmentService = Depends(get_department_service),
+    service: DepartmentService = Depends(get_department_service),  # noqa: B008
 ) -> dict:
     total, items = service.get_departments(skip=skip, limit=limit)
     return {"total": total, "items": items, "skip": skip, "limit": limit}
@@ -48,7 +48,7 @@ def list_departments(
 )
 def get_department(
     department_id: int,
-    service: DepartmentService = Depends(get_department_service),
+    service: DepartmentService = Depends(get_department_service),  # noqa: B008
 ) -> DepartmentResponse:
     return service.get_department(department_id)  # type: ignore
 
@@ -61,7 +61,7 @@ def get_department(
 def update_department(
     department_id: int,
     department: DepartmentUpdate,
-    service: DepartmentService = Depends(get_department_service),
+    service: DepartmentService = Depends(get_department_service),  # noqa: B008
 ) -> DepartmentResponse:
     return service.update_department(department_id, department)  # type: ignore
 
@@ -73,7 +73,7 @@ def update_department(
 )
 def delete_department(
     department_id: int,
-    service: DepartmentService = Depends(get_department_service),
+    service: DepartmentService = Depends(get_department_service),  # noqa: B008
 ) -> None:
     service.delete_department(department_id)
 
@@ -87,7 +87,7 @@ def list_department_employees(
     department_id: int,
     skip: int = Query(0, ge=0),
     limit: int = Query(100, ge=1, le=100),
-    service: EmployeeService = Depends(get_employee_service),
+    service: EmployeeService = Depends(get_employee_service),  # noqa: B008
 ) -> dict:
     total, items = service.get_department_employees(
         department_id, skip=skip, limit=limit

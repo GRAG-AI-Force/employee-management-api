@@ -1,5 +1,4 @@
 import uuid
-from typing import List, Tuple
 
 from fastapi import HTTPException, status
 
@@ -31,12 +30,12 @@ class EmployeeService:
 
     def get_employees(
         self, skip: int = 0, limit: int = 100
-    ) -> Tuple[int, List[Employee]]:
+    ) -> tuple[int, list[Employee]]:
         return self.employee_repo.get_list(skip=skip, limit=limit)
 
     def get_department_employees(
         self, department_id: int, skip: int = 0, limit: int = 100
-    ) -> Tuple[int, List[Employee]]:
+    ) -> tuple[int, list[Employee]]:
         # Verify department exists
         department = self.department_repo.get_by_id(department_id)
         if not department:
@@ -50,7 +49,7 @@ class EmployeeService:
 
     def search_employees(
         self, query: str, skip: int = 0, limit: int = 100
-    ) -> Tuple[int, List[Employee]]:
+    ) -> tuple[int, list[Employee]]:
         return self.employee_repo.search(query, skip=skip, limit=limit)
 
     def create_employee(self, obj_in: EmployeeCreate) -> Employee:

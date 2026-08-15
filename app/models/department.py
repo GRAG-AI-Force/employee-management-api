@@ -1,5 +1,5 @@
-from datetime import datetime, timezone
-from typing import TYPE_CHECKING, List
+from datetime import UTC, datetime
+from typing import TYPE_CHECKING
 
 from sqlalchemy import DateTime, String, Text
 from sqlalchemy.orm import Mapped, mapped_column, relationship
@@ -19,15 +19,15 @@ class Department(Base):
     )
     description: Mapped[str | None] = mapped_column(Text)
     created_at: Mapped[datetime] = mapped_column(
-        DateTime(timezone=True), default=lambda: datetime.now(timezone.utc)
+        DateTime(timezone=True), default=lambda: datetime.now(UTC)
     )
     updated_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True),
-        default=lambda: datetime.now(timezone.utc),
-        onupdate=lambda: datetime.now(timezone.utc),
+        default=lambda: datetime.now(UTC),
+        onupdate=lambda: datetime.now(UTC),
     )
 
     # Relationships
-    employees: Mapped[List["Employee"]] = relationship(
+    employees: Mapped[list["Employee"]] = relationship(
         "Employee", back_populates="department", cascade="all, delete-orphan"
     )

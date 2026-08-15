@@ -1,5 +1,3 @@
-from typing import List, Tuple
-
 from fastapi import HTTPException, status
 
 from app.models.department import Department
@@ -22,7 +20,7 @@ class DepartmentService:
 
     def get_departments(
         self, skip: int = 0, limit: int = 100
-    ) -> Tuple[int, List[Department]]:
+    ) -> tuple[int, list[Department]]:
         return self.repository.get_list(skip=skip, limit=limit)
 
     def create_department(self, obj_in: DepartmentCreate) -> Department:
