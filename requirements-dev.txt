@@ -9,5 +9,5 @@ bandit==1.7.10
 semgrep==1.90.0
 types-passlib
 types-python-jose
-
+pygments>=2.20.0
 schemathesis==3.39.16
