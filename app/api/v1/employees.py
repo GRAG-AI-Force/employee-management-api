@@ -1,4 +1,6 @@
-from fastapi import APIRouter, Depends, Query, status
+from typing import Annotated
+
+from fastapi import APIRouter, Depends, Path, Query, status
 
 from app.dependencies.services import get_employee_service
 from app.schemas.common import PaginatedResponse
@@ -11,6 +13,15 @@ from app.schemas.employee import (
 from app.services.employee import EmployeeService
 
 router = APIRouter(prefix="/employees", tags=["Employees"])
+
+EmployeeId = Annotated[
+    int,
+    Path(
+        ge=1,
+        le=2_147_483_647,
+        description="Employee ID (32-bit integer)",
+    ),
+]
 
 
 @router.post(
@@ -61,7 +72,7 @@ def list_employees(
     summary="Get an employee by ID",
 )
 def get_employee(
-    employee_id: int,
+    employee_id: EmployeeId,
     service: EmployeeService = Depends(get_employee_service),
 ) -> EmployeeResponse:
     return service.get_employee(employee_id)  # type: ignore
@@ -73,7 +84,7 @@ def get_employee(
     summary="Update an employee",
 )
 def update_employee(
-    employee_id: int,
+    employee_id: EmployeeId,
     employee: EmployeeUpdate,
     service: EmployeeService = Depends(get_employee_service),
 ) -> EmployeeResponse:
@@ -86,7 +97,7 @@ def update_employee(
     summary="Update employee active status",
 )
 def update_employee_status(
-    employee_id: int,
+    employee_id: EmployeeId,
     status_update: EmployeeStatusUpdate,
     service: EmployeeService = Depends(get_employee_service),
 ) -> EmployeeResponse:
@@ -99,7 +110,7 @@ def update_employee_status(
     summary="Delete an employee",
 )
 def delete_employee(
-    employee_id: int,
+    employee_id: EmployeeId,
     service: EmployeeService = Depends(get_employee_service),
 ) -> None:
     service.delete_employee(employee_id)

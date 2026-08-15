@@ -12,7 +12,7 @@ class EmployeeBase(BaseModel):
     phone: str | None = Field(None, max_length=20)
     job_title: str = Field(..., min_length=2, max_length=100)
     salary: Decimal = Field(..., gt=0, max_digits=10, decimal_places=2)
-    department_id: int
+    department_id: int = Field(..., ge=1, le=2_147_483_647)
     is_active: bool = True
 
     @field_validator("phone")
@@ -34,7 +34,7 @@ class EmployeeUpdate(BaseModel):
     phone: str | None = Field(None, max_length=20)
     job_title: str | None = Field(None, min_length=2, max_length=100)
     salary: Decimal | None = Field(None, gt=0, max_digits=10, decimal_places=2)
-    department_id: int | None = None
+    department_id: int | None = Field(None, ge=1, le=2_147_483_647)
     is_active: bool | None = None
 
     @field_validator("phone")
