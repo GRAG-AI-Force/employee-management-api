@@ -30,5 +30,4 @@ class Settings(BaseSettings):
     )
 
 
-# Instantiate the settings object
-settings = Settings()  # type: ignore
+settings = Settings()
