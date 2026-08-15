@@ -80,7 +80,8 @@ class EmployeeRepository:
 
     def update(self, db_obj: Employee, update_data: dict) -> Employee:
         for field, value in update_data.items():
-            setattr(db_obj, field, value)
+            if value is not None or field == "phone":
+                setattr(db_obj, field, value)
 
         self.session.add(db_obj)
         self.session.commit()

@@ -6,7 +6,7 @@ from sqlalchemy.orm import Session
 
 from app.core.config import settings
 from app.dependencies.database import get_db
-from app.schemas.common import HealthResponse
+from app.schemas.common import ErrorResponse, HealthResponse
 
 router = APIRouter(tags=["Health"])
 logger = logging.getLogger(__name__)
@@ -29,6 +29,12 @@ def health_check() -> HealthResponse:
     "/ready",
     response_model=HealthResponse,
     status_code=status.HTTP_200_OK,
+    responses={
+        status.HTTP_503_SERVICE_UNAVAILABLE: {
+            "model": ErrorResponse,
+            "description": "Service is not ready (Database connection failed)",
+        },
+    },
     summary="Readiness probe",
 )
 def readiness_check(db: Session = Depends(get_db)) -> HealthResponse:

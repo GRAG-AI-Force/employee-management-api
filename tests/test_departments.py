@@ -84,4 +84,3 @@ def test_department_id_out_of_range(client: TestClient):
 
     response = client.get("/api/v1/departments/-10")
     assert response.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
-
