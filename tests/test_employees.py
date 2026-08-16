@@ -218,11 +218,11 @@ def test_unknown_query_parameters_employees(client: TestClient):
             {
                 "loc": ["query", "extra"],
                 "msg": "Extra inputs are not permitted",
-                "type": "extra_forbidden"
+                "type": "extra_forbidden",
             }
         ]
     }
-    
+
     response = client.get("/api/v1/employees/search?q=test&extra=1")
     assert response.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
     assert response.json() == {
@@ -230,7 +230,7 @@ def test_unknown_query_parameters_employees(client: TestClient):
             {
                 "loc": ["query", "extra"],
                 "msg": "Extra inputs are not permitted",
-                "type": "extra_forbidden"
+                "type": "extra_forbidden",
             }
         ]
     }
