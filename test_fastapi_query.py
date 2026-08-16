@@ -4,14 +4,17 @@ from fastapi.testclient import TestClient
 
 app = FastAPI()
 
+
 class PagParams(BaseModel):
     model_config = ConfigDict(extra="forbid")
     skip: int = 0
     limit: int = 100
 
+
 @app.get("/items/")
 def read_items(params: PagParams = Query(...)):
     return params
+
 
 client = TestClient(app)
 
