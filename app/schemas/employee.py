@@ -27,11 +27,11 @@ StrictDecimal = Annotated[
 
 
 class EmployeeBase(BaseModel):
-    first_name: str = Field(..., min_length=2, max_length=100)
-    last_name: str = Field(..., min_length=2, max_length=100)
+    first_name: str = Field(..., min_length=2, max_length=100, pattern=r"^[^\x00]*$")
+    last_name: str = Field(..., min_length=2, max_length=100, pattern=r"^[^\x00]*$")
     email: EmailStr
-    phone: str | None = Field(None, max_length=20)
-    job_title: str = Field(..., min_length=2, max_length=100)
+    phone: str | None = Field(None, max_length=20, pattern=r"^[\d\+\-\s\(\)]+$")
+    job_title: str = Field(..., min_length=2, max_length=100, pattern=r"^[^\x00]*$")
     salary: StrictDecimal = Field(
         ...,
         ge=Decimal("0.01"),
@@ -55,11 +55,17 @@ class EmployeeCreate(EmployeeBase):
 
 
 class EmployeeUpdate(BaseModel):
-    first_name: str | None = Field(None, min_length=2, max_length=100)
-    last_name: str | None = Field(None, min_length=2, max_length=100)
+    first_name: str | None = Field(
+        None, min_length=2, max_length=100, pattern=r"^[^\x00]*$"
+    )
+    last_name: str | None = Field(
+        None, min_length=2, max_length=100, pattern=r"^[^\x00]*$"
+    )
     email: EmailStr | None = None
-    phone: str | None = Field(None, max_length=20)
-    job_title: str | None = Field(None, min_length=2, max_length=100)
+    phone: str | None = Field(None, max_length=20, pattern=r"^[\d\+\-\s\(\)]+$")
+    job_title: str | None = Field(
+        None, min_length=2, max_length=100, pattern=r"^[^\x00]*$"
+    )
     salary: StrictDecimal | None = Field(
         None,
         ge=Decimal("0.01"),

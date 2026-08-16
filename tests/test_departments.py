@@ -83,7 +83,7 @@ def test_department_id_out_of_range(client: TestClient):
     assert response.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
 
     response = client.get("/api/v1/departments/-10")
-    assert response.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
+    assert response.status_code == status.HTTP_404_NOT_FOUND
 
 
 def test_unknown_query_parameters_departments(client: TestClient):
