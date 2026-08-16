@@ -7,6 +7,8 @@ from app.repositories.department import DepartmentRepository
 from app.repositories.employee import EmployeeRepository
 from app.schemas.employee import EmployeeCreate, EmployeeStatusUpdate, EmployeeUpdate
 
+DEPARTMENT_NOT_FOUND_MSG = "Department not found"
+
 
 class EmployeeService:
     def __init__(
@@ -41,7 +43,7 @@ class EmployeeService:
         if not department:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
-                detail="Department not found",
+                detail=DEPARTMENT_NOT_FOUND_MSG,
             )
         return self.employee_repo.get_by_department(
             department_id, skip=skip, limit=limit
@@ -66,7 +68,7 @@ class EmployeeService:
         if not department:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
-                detail="Department not found",
+                detail=DEPARTMENT_NOT_FOUND_MSG,
             )
 
         employee_data = obj_in.model_dump()
@@ -91,7 +93,7 @@ class EmployeeService:
             if not department:
                 raise HTTPException(
                     status_code=status.HTTP_404_NOT_FOUND,
-                    detail="Department not found",
+                    detail=DEPARTMENT_NOT_FOUND_MSG,
                 )
 
         update_data = obj_in.model_dump(exclude_unset=True)
