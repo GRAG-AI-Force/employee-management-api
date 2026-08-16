@@ -1,6 +1,7 @@
 from datetime import UTC, datetime
 
 from pydantic import BaseModel, ConfigDict, Field, field_serializer
+
 NO_NULL_CHARS_PATTERN = r"^[^\x00]*$"
 
 
@@ -14,7 +15,9 @@ class DepartmentCreate(DepartmentBase):
 
 
 class DepartmentUpdate(BaseModel):
-    name: str | None = Field(None, min_length=2, max_length=100, pattern=NO_NULL_CHARS_PATTERN)
+    name: str | None = Field(
+        None, min_length=2, max_length=100, pattern=NO_NULL_CHARS_PATTERN
+    )
     description: str | None = Field(None, pattern=NO_NULL_CHARS_PATTERN)
 
 

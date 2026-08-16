@@ -30,11 +30,17 @@ StrictDecimal = Annotated[
 
 
 class EmployeeBase(BaseModel):
-    first_name: str = Field(..., min_length=2, max_length=100, pattern=NO_NULL_CHARS_PATTERN)
-    last_name: str = Field(..., min_length=2, max_length=100, pattern=NO_NULL_CHARS_PATTERN)
+    first_name: str = Field(
+        ..., min_length=2, max_length=100, pattern=NO_NULL_CHARS_PATTERN
+    )
+    last_name: str = Field(
+        ..., min_length=2, max_length=100, pattern=NO_NULL_CHARS_PATTERN
+    )
     email: EmailStr
     phone: str | None = Field(None, max_length=20, pattern=PHONE_NUMBER_PATTERN)
-    job_title: str = Field(..., min_length=2, max_length=100, pattern=NO_NULL_CHARS_PATTERN)
+    job_title: str = Field(
+        ..., min_length=2, max_length=100, pattern=NO_NULL_CHARS_PATTERN
+    )
     salary: StrictDecimal = Field(
         ...,
         ge=Decimal("0.01"),
