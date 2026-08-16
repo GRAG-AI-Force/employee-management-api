@@ -34,7 +34,10 @@ EmployeeId = Annotated[
             "model": ErrorResponse,
             "description": "Bad Request",
         },
-        status.HTTP_404_NOT_FOUND: {"model": ErrorResponse, "description": "Department not found"},
+        status.HTTP_404_NOT_FOUND: {
+            "model": ErrorResponse,
+            "description": "Department not found",
+        },
         status.HTTP_409_CONFLICT: {"model": ErrorResponse, "description": "Conflict"},
     },
     summary="Create a new employee",
