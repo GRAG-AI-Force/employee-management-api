@@ -66,6 +66,15 @@ async def add_request_id_and_log(
         # if needed.
         response.headers["X-Content-Type-Options"] = "nosniff"
         response.headers["Cross-Origin-Resource-Policy"] = "same-origin"
+        response.headers["X-Frame-Options"] = "DENY"
+        response.headers["Content-Security-Policy"] = "default-src 'self'"
+        response.headers["Strict-Transport-Security"] = "max-age=31536000; includeSubDomains"
+        response.headers["Cache-Control"] = "no-store, no-cache, must-revalidate, max-age=0"
+        
+        # Prevent server version information leakage
+        if "server" in response.headers:
+            del response.headers["server"]
+            
         return response
     finally:
         logging.setLogRecordFactory(old_factory)
