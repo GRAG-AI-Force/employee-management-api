@@ -1,6 +1,7 @@
 import re
 from datetime import UTC, datetime
 from decimal import Decimal
+from typing import Annotated
 
 from pydantic import (
     BaseModel,
@@ -11,7 +12,6 @@ from pydantic import (
     field_validator,
 )
 from pydantic.json_schema import WithJsonSchema
-from typing import Annotated
 
 StrictDecimal = Annotated[
     Decimal, WithJsonSchema({"type": "number", "format": "decimal"})
