@@ -13,7 +13,9 @@ from pydantic import (
 from pydantic.json_schema import WithJsonSchema
 from typing import Annotated
 
-StrictDecimal = Annotated[Decimal, WithJsonSchema({"type": "number", "format": "decimal"})]
+StrictDecimal = Annotated[
+    Decimal, WithJsonSchema({"type": "number", "format": "decimal"})
+]
 
 
 class EmployeeBase(BaseModel):
