@@ -213,6 +213,24 @@ def test_update_employee_empty_salary(client: TestClient, test_department):
 def test_unknown_query_parameters_employees(client: TestClient):
     response = client.get("/api/v1/employees?extra=1")
     assert response.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
-
+    assert response.json() == {
+        "detail": [
+            {
+                "loc": ["query", "extra"],
+                "msg": "Extra inputs are not permitted",
+                "type": "extra_forbidden"
+            }
+        ]
+    }
+    
     response = client.get("/api/v1/employees/search?q=test&extra=1")
     assert response.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
+    assert response.json() == {
+        "detail": [
+            {
+                "loc": ["query", "extra"],
+                "msg": "Extra inputs are not permitted",
+                "type": "extra_forbidden"
+            }
+        ]
+    }

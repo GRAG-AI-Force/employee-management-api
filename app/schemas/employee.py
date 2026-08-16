@@ -14,7 +14,13 @@ from pydantic import (
 from pydantic.json_schema import WithJsonSchema
 
 StrictDecimal = Annotated[
-    Decimal, WithJsonSchema({"type": "number", "format": "decimal"})
+    Decimal, 
+    WithJsonSchema({
+        "type": "number", 
+        "format": "decimal",
+        "minimum": 0.01,
+        "maximum": 99999999.99,
+    })
 ]
 
 

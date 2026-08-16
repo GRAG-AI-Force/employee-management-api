@@ -89,6 +89,15 @@ def test_department_id_out_of_range(client: TestClient):
 def test_unknown_query_parameters_departments(client: TestClient):
     response = client.get("/api/v1/departments?extra=1")
     assert response.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
+    assert response.json() == {
+        "detail": [
+            {
+                "loc": ["query", "extra"],
+                "msg": "Extra inputs are not permitted",
+                "type": "extra_forbidden"
+            }
+        ]
+    }
 
 
 def test_unknown_query_parameters_department_employees(client: TestClient):
@@ -97,3 +106,12 @@ def test_unknown_query_parameters_department_employees(client: TestClient):
 
     response = client.get(f"/api/v1/departments/{dept_id}/employees?extra=1")
     assert response.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
+    assert response.json() == {
+        "detail": [
+            {
+                "loc": ["query", "extra"],
+                "msg": "Extra inputs are not permitted",
+                "type": "extra_forbidden"
+            }
+        ]
+    }
