@@ -94,7 +94,7 @@ def test_unknown_query_parameters_departments(client: TestClient):
             {
                 "loc": ["query", "extra"],
                 "msg": "Extra inputs are not permitted",
-                "type": "extra_forbidden"
+                "type": "extra_forbidden",
             }
         ]
     }
@@ -111,7 +111,7 @@ def test_unknown_query_parameters_department_employees(client: TestClient):
             {
                 "loc": ["query", "extra"],
                 "msg": "Extra inputs are not permitted",
-                "type": "extra_forbidden"
+                "type": "extra_forbidden",
             }
         ]
     }

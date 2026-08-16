@@ -1,4 +1,5 @@
 from collections.abc import Callable
+
 from fastapi import Request
 from fastapi.exceptions import RequestValidationError
 
@@ -20,7 +21,7 @@ def strict_query_params(allowed_params: set[str]) -> Callable[[Request], None]:
                         "type": "extra_forbidden",
                     }
                 )
-        
+
         if errors:
             raise RequestValidationError(errors)
 
