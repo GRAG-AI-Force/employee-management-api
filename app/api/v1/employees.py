@@ -81,7 +81,7 @@ def list_employees(
 
 
 @router.get(
-    "/{employee_id}",
+    "/{employee_id:int}",
     response_model=EmployeeResponse,
     responses={
         status.HTTP_404_NOT_FOUND: {"model": ErrorResponse, "description": "Not Found"},
@@ -96,7 +96,7 @@ def get_employee(
 
 
 @router.put(
-    "/{employee_id}",
+    "/{employee_id:int}",
     response_model=EmployeeResponse,
     responses={
         status.HTTP_400_BAD_REQUEST: {
@@ -117,7 +117,7 @@ def update_employee(
 
 
 @router.patch(
-    "/{employee_id}/status",
+    "/{employee_id:int}/status",
     response_model=EmployeeResponse,
     responses={
         status.HTTP_400_BAD_REQUEST: {
@@ -137,7 +137,7 @@ def update_employee_status(
 
 
 @router.delete(
-    "/{employee_id}",
+    "/{employee_id:int}",
     status_code=status.HTTP_204_NO_CONTENT,
     responses={
         status.HTTP_404_NOT_FOUND: {"model": ErrorResponse, "description": "Not Found"},

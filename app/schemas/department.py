@@ -4,8 +4,8 @@ from pydantic import BaseModel, ConfigDict, Field, field_serializer
 
 
 class DepartmentBase(BaseModel):
-    name: str = Field(..., min_length=2, max_length=100)
-    description: str | None = None
+    name: str = Field(..., min_length=2, max_length=100, pattern=r"^[^\x00]*$")
+    description: str | None = Field(None, pattern=r"^[^\x00]*$")
 
 
 class DepartmentCreate(DepartmentBase):
@@ -13,8 +13,8 @@ class DepartmentCreate(DepartmentBase):
 
 
 class DepartmentUpdate(BaseModel):
-    name: str | None = Field(None, min_length=2, max_length=100)
-    description: str | None = None
+    name: str | None = Field(None, min_length=2, max_length=100, pattern=r"^[^\x00]*$")
+    description: str | None = Field(None, pattern=r"^[^\x00]*$")
 
 
 class DepartmentResponse(DepartmentBase):

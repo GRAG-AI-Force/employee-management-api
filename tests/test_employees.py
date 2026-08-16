@@ -172,7 +172,7 @@ def test_employee_id_out_of_range(client: TestClient):
     assert response.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
 
     response = client.get("/api/v1/employees/-5")
-    assert response.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
+    assert response.status_code == status.HTTP_404_NOT_FOUND
 
 
 def test_search_employees_null_byte(client: TestClient):

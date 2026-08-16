@@ -62,7 +62,7 @@ def list_departments(
 
 
 @router.get(
-    "/{department_id}",
+    "/{department_id:int}",
     response_model=DepartmentResponse,
     responses={
         status.HTTP_404_NOT_FOUND: {"model": ErrorResponse, "description": "Not Found"},
@@ -77,7 +77,7 @@ def get_department(
 
 
 @router.put(
-    "/{department_id}",
+    "/{department_id:int}",
     response_model=DepartmentResponse,
     responses={
         status.HTTP_400_BAD_REQUEST: {
@@ -98,7 +98,7 @@ def update_department(
 
 
 @router.delete(
-    "/{department_id}",
+    "/{department_id:int}",
     status_code=status.HTTP_204_NO_CONTENT,
     responses={
         status.HTTP_404_NOT_FOUND: {"model": ErrorResponse, "description": "Not Found"},
@@ -113,7 +113,7 @@ def delete_department(
 
 
 @router.get(
-    "/{department_id}/employees",
+    "/{department_id:int}/employees",
     response_model=PaginatedResponse[EmployeeResponse],
     responses={
         status.HTTP_404_NOT_FOUND: {"model": ErrorResponse, "description": "Not Found"},
