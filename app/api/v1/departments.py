@@ -3,6 +3,7 @@ from typing import Annotated
 from fastapi import APIRouter, Depends, Path, Query, status
 
 from app.dependencies.services import get_department_service, get_employee_service
+from app.dependencies.query import strict_query_params
 from app.schemas.common import ErrorResponse, PaginatedResponse
 from app.schemas.department import (
     DepartmentCreate,
@@ -49,6 +50,7 @@ def create_department(
     "",
     response_model=PaginatedResponse[DepartmentResponse],
     summary="List departments",
+    dependencies=[Depends(strict_query_params({"skip", "limit"}))],
 )
 def list_departments(
     skip: int = Query(0, ge=0, le=100_000),
@@ -117,6 +119,7 @@ def delete_department(
         status.HTTP_404_NOT_FOUND: {"model": ErrorResponse, "description": "Not Found"},
     },
     summary="List employees in a department",
+    dependencies=[Depends(strict_query_params({"skip", "limit"}))],
 )
 def list_department_employees(
     department_id: DepartmentId,

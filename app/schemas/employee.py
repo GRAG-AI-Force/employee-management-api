@@ -10,6 +10,10 @@ from pydantic import (
     field_serializer,
     field_validator,
 )
+from pydantic.json_schema import WithJsonSchema
+from typing import Annotated
+
+StrictDecimal = Annotated[Decimal, WithJsonSchema({"type": "number", "format": "decimal"})]
 
 
 class EmployeeBase(BaseModel):
@@ -18,12 +22,10 @@ class EmployeeBase(BaseModel):
     email: EmailStr
     phone: str | None = Field(None, max_length=20)
     job_title: str = Field(..., min_length=2, max_length=100)
-    salary: Decimal = Field(
+    salary: StrictDecimal = Field(
         ...,
         ge=Decimal("0.01"),
         le=Decimal("99999999.99"),
-        max_digits=10,
-        decimal_places=2,
     )
     department_id: int = Field(..., ge=1, le=2_147_483_647)
     is_active: bool = True
@@ -48,12 +50,10 @@ class EmployeeUpdate(BaseModel):
     email: EmailStr | None = None
     phone: str | None = Field(None, max_length=20)
     job_title: str | None = Field(None, min_length=2, max_length=100)
-    salary: Decimal | None = Field(
+    salary: StrictDecimal | None = Field(
         None,
         ge=Decimal("0.01"),
         le=Decimal("99999999.99"),
-        max_digits=10,
-        decimal_places=2,
     )
     department_id: int | None = Field(None, ge=1, le=2_147_483_647)
     is_active: bool | None = None
