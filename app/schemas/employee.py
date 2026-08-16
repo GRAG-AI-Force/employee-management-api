@@ -13,6 +13,9 @@ from pydantic import (
 )
 from pydantic.json_schema import WithJsonSchema
 
+NO_NULL_CHARS_PATTERN = r"^[^\x00]*$"
+PHONE_NUMBER_PATTERN = r"^[\d\+\-\s\(\)]+$"
+
 StrictDecimal = Annotated[
     Decimal,
     WithJsonSchema(
@@ -27,11 +30,11 @@ StrictDecimal = Annotated[
 
 
 class EmployeeBase(BaseModel):
-    first_name: str = Field(..., min_length=2, max_length=100, pattern=r"^[^\x00]*$")
-    last_name: str = Field(..., min_length=2, max_length=100, pattern=r"^[^\x00]*$")
+    first_name: str = Field(..., min_length=2, max_length=100, pattern=NO_NULL_CHARS_PATTERN)
+    last_name: str = Field(..., min_length=2, max_length=100, pattern=NO_NULL_CHARS_PATTERN)
     email: EmailStr
-    phone: str | None = Field(None, max_length=20, pattern=r"^[\d\+\-\s\(\)]+$")
-    job_title: str = Field(..., min_length=2, max_length=100, pattern=r"^[^\x00]*$")
+    phone: str | None = Field(None, max_length=20, pattern=PHONE_NUMBER_PATTERN)
+    job_title: str = Field(..., min_length=2, max_length=100, pattern=NO_NULL_CHARS_PATTERN)
     salary: StrictDecimal = Field(
         ...,
         ge=Decimal("0.01"),
@@ -45,7 +48,7 @@ class EmployeeBase(BaseModel):
     def validate_phone(cls, v: str | None) -> str | None:
         if v == "" or v is None:
             return None
-        if not re.match(r"^[\d\+\-\s\(\)]+$", v):
+        if not re.match(PHONE_NUMBER_PATTERN, v):
             raise ValueError("Invalid phone number format")
         return v
 
@@ -56,15 +59,15 @@ class EmployeeCreate(EmployeeBase):
 
 class EmployeeUpdate(BaseModel):
     first_name: str | None = Field(
-        None, min_length=2, max_length=100, pattern=r"^[^\x00]*$"
+        None, min_length=2, max_length=100, pattern=NO_NULL_CHARS_PATTERN
     )
     last_name: str | None = Field(
-        None, min_length=2, max_length=100, pattern=r"^[^\x00]*$"
+        None, min_length=2, max_length=100, pattern=NO_NULL_CHARS_PATTERN
     )
     email: EmailStr | None = None
-    phone: str | None = Field(None, max_length=20, pattern=r"^[\d\+\-\s\(\)]+$")
+    phone: str | None = Field(None, max_length=20, pattern=PHONE_NUMBER_PATTERN)
     job_title: str | None = Field(
-        None, min_length=2, max_length=100, pattern=r"^[^\x00]*$"
+        None, min_length=2, max_length=100, pattern=NO_NULL_CHARS_PATTERN
     )
     salary: StrictDecimal | None = Field(
         None,
@@ -79,7 +82,7 @@ class EmployeeUpdate(BaseModel):
     def validate_phone(cls, v: str | None) -> str | None:
         if v == "" or v is None:
             return None
-        if not re.match(r"^[\d\+\-\s\(\)]+$", v):
+        if not re.match(PHONE_NUMBER_PATTERN, v):
             raise ValueError("Invalid phone number format")
         return v
 
