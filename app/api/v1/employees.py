@@ -2,8 +2,8 @@ from typing import Annotated
 
 from fastapi import APIRouter, Depends, Path, Query, status
 
-from app.dependencies.services import get_employee_service
 from app.dependencies.query import strict_query_params
+from app.dependencies.services import get_employee_service
 from app.schemas.common import ErrorResponse, PaginatedResponse
 from app.schemas.employee import (
     EmployeeCreate,
