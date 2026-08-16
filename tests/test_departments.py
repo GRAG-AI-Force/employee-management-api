@@ -84,3 +84,16 @@ def test_department_id_out_of_range(client: TestClient):
 
     response = client.get("/api/v1/departments/-10")
     assert response.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
+
+
+def test_unknown_query_parameters_departments(client: TestClient):
+    response = client.get("/api/v1/departments?extra=1")
+    assert response.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
+
+
+def test_unknown_query_parameters_department_employees(client: TestClient):
+    create_res = client.post("/api/v1/departments", json={"name": "Test Query Dept"})
+    dept_id = create_res.json()["id"]
+
+    response = client.get(f"/api/v1/departments/{dept_id}/employees?extra=1")
+    assert response.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY

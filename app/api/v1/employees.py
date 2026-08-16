@@ -3,6 +3,7 @@ from typing import Annotated
 from fastapi import APIRouter, Depends, Path, Query, status
 
 from app.dependencies.services import get_employee_service
+from app.dependencies.query import strict_query_params
 from app.schemas.common import ErrorResponse, PaginatedResponse
 from app.schemas.employee import (
     EmployeeCreate,
@@ -33,6 +34,7 @@ EmployeeId = Annotated[
             "model": ErrorResponse,
             "description": "Bad Request",
         },
+        status.HTTP_404_NOT_FOUND: {"model": ErrorResponse, "description": "Department not found"},
         status.HTTP_409_CONFLICT: {"model": ErrorResponse, "description": "Conflict"},
     },
     summary="Create a new employee",
@@ -48,9 +50,10 @@ def create_employee(
     "/search",
     response_model=PaginatedResponse[EmployeeResponse],
     summary="Search employees by name, email, or code",
+    dependencies=[Depends(strict_query_params({"q", "skip", "limit"}))],
 )
 def search_employees(
-    q: str = Query(..., min_length=2, description="Search term"),
+    q: str = Query(..., min_length=2, pattern=r"^[^\x00]*$", description="Search term"),
     skip: int = Query(0, ge=0, le=100_000),
     limit: int = Query(100, ge=1, le=100),
     service: EmployeeService = Depends(get_employee_service),
@@ -63,6 +66,7 @@ def search_employees(
     "",
     response_model=PaginatedResponse[EmployeeResponse],
     summary="List all employees",
+    dependencies=[Depends(strict_query_params({"skip", "limit"}))],
 )
 def list_employees(
     skip: int = Query(0, ge=0, le=100_000),

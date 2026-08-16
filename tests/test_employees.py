@@ -77,7 +77,7 @@ def test_create_employee_invalid_department(client: TestClient):
             "department_id": 99999,
         },
     )
-    assert response.status_code == status.HTTP_400_BAD_REQUEST
+    assert response.status_code == status.HTTP_404_NOT_FOUND
 
 
 def test_get_employee(client: TestClient, test_department):
@@ -172,4 +172,47 @@ def test_employee_id_out_of_range(client: TestClient):
     assert response.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
 
     response = client.get("/api/v1/employees/-5")
+    assert response.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
+
+
+def test_search_employees_null_byte(client: TestClient):
+    response = client.get("/api/v1/employees/search?q=%00")
+    assert response.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
+
+
+def test_search_employees_exact_failing_input(client: TestClient):
+    # Regression test for Schemathesis generated 500 error input
+    response = client.get(
+        "/api/v1/employees/search",
+        params={
+            "q": "\u00c7d\u0000\u00d9",
+            "limit": 59,
+            "skip": 46633,
+        },
+    )
+    assert response.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
+
+
+def test_update_employee_empty_salary(client: TestClient, test_department):
+    create_res = client.post(
+        "/api/v1/employees",
+        json={
+            "first_name": "Test",
+            "last_name": "User",
+            "email": "test.salary@example.com",
+            "job_title": "Tester",
+            "salary": 50000.0,
+            "department_id": test_department["id"],
+        },
+    )
+    emp_id = create_res.json()["id"]
+    response = client.put(f"/api/v1/employees/{emp_id}", json={"salary": ""})
+    assert response.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
+
+
+def test_unknown_query_parameters_employees(client: TestClient):
+    response = client.get("/api/v1/employees?extra=1")
+    assert response.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
+    
+    response = client.get("/api/v1/employees/search?q=test&extra=1")
     assert response.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
